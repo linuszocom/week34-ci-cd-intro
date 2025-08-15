@@ -1,8 +1,8 @@
-# Week 34 – CI/CD Intro
+# Week 34 – CI/CD Intro (Wednesday)
 
 ## 🔨 Praktiska övningar
 
-### 🟢 Lätt – Skapa en enkel CI-pipeline
+### 🟢 Lätt – Skapa en minimal CI-pipeline
 1. Skapa eller klona ett JavaScript/React-projekt.
 2. Skapa mappen `.github/workflows/` i projektets rot.
 3. Lägg till en fil `ci.yml` med följande innehåll:
@@ -11,8 +11,6 @@
 
     on:
       push:
-        branches: [ "main" ]
-      pull_request:
         branches: [ "main" ]
 
     jobs:
@@ -32,16 +30,18 @@
 
 ---
 
-### 🟠 Medel – Lägg till kodgranskning i flödet
-1. Skapa en ny branch `feature/my-change`.
-2. Gör en kodändring.
-3. Skicka en Pull Request mot `main`.
-4. Kontrollera att pipelinen körs automatiskt på PR:en.
+### 🟠 Medel – Lägg till branch-triggers och manuellt flöde
+1. Ändra `on:`-delen i pipelinen så att den även körs på `develop`-branch.
+2. Lägg till ett manuellt körningsalternativ med:
+    ```yaml
+    workflow_dispatch:
+    ```
+3. Pusha ändringen och testa att köra pipelinen manuellt från GitHub.
 
 ---
 
-### 🔴 Svår – Utöka pipelinen med fler steg
-1. Lägg till ett steg för att köra `npm run build` efter testerna.
+### 🔴 Svår – Utöka pipelinen med fler bygg- och teststeg
+1. Lägg till ett steg som kör `npm run build` efter testerna.
 2. Lägg till ett steg som kör `eslint .` för att linta koden.
-3. Gör en commit och pusha.
-4. Kontrollera att alla steg körs och att pipelinen blir grön.
+3. Se till att pipelinen misslyckas om linter hittar fel.
+4. Pusha ändringarna och kontrollera att alla steg körs.
