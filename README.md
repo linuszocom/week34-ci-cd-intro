@@ -1,4 +1,4 @@
-# Week 34 – CI/CD Intro
+# Vecka 34 – CI/CD Intro
 
 ## 🔨 Praktiska övningar
 
