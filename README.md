@@ -2,10 +2,13 @@
 
 ## 🔨 Praktiska övningar
 
-### 🟢 Lätt – Skapa en minimal CI-pipeline
-1. Skapa eller klona ett JavaScript/React-projekt.
-2. Skapa mappen `.github/workflows/` i projektets rot.
-3. Lägg till en fil `ci.yml` med följande innehåll:
+### 🟢 Lätt – Skapa din första CI-pipeline
+Mål: Förstå grunderna i hur GitHub Actions fungerar.
+
+1. Skapa eller klona ett JavaScript/React-projekt (kan vara ett enkelt "Hello World").
+2. Skapa en mapp i projektets rot:  
+   `.github/workflows/`
+3. Inuti den mappen, skapa en fil som heter `ci.yml` och klistra in följande kod:
     ```yaml
     name: CI
 
@@ -25,23 +28,53 @@
           - run: npm install
           - run: npm test
     ```
-4. Committa och pusha till GitHub.
-5. Kontrollera pipelinen under fliken **Actions**.
+4. Gör en commit och pusha till GitHub.
+5. Gå till fliken **Actions** i ditt repo och se om pipelinen körs.
+6. Kontrollera att stegen blir **grönmarkerade** och inte visar några fel.
 
 ---
 
-### 🟠 Medel – Lägg till branch-triggers och manuellt flöde
-1. Ändra `on:`-delen i pipelinen så att den även körs på `develop`-branch.
-2. Lägg till ett manuellt körningsalternativ med:
+### 🟠 Medel – Lägg till fler sätt att starta pipelinen
+Mål: Lära hur man styr när pipelinen ska köras.
+
+💡 **Förberedelse:**  
+Om du inte redan har en `dev`-branch i ditt repo så skapa en och pusha upp den till ditt repo. 
+
+1. Öppna din `ci.yml` igen.
+2. Under `on:`, lägg till att pipelinen även ska köras när kod pushas till `dev`-branchen:
     ```yaml
-    workflow_dispatch:
+    on:
+      push:
+        branches: [ "main", "dev" ]
     ```
-3. Pusha ändringen och testa att köra pipelinen manuellt från GitHub.
+3. Lägg även till möjlighet att starta pipelinen manuellt från GitHub-gränssnittet genom att lägga till:
+    ```yaml
+      workflow_dispatch:
+    ```
+   Resultatet ska se ut så här:
+    ```yaml
+    on:
+      push:
+        branches: [ "main", "dev" ]
+      workflow_dispatch:
+    ```
+4. Committa och pusha ändringarna.
+5. Gå till **Actions** → välj din pipeline → klicka på **Run workflow** för att starta manuellt.
+6. Bekräfta att pipelinen körs även om du inte pushar ny kod.
 
 ---
 
-### 🔴 Svår – Utöka pipelinen med fler bygg- och teststeg
-1. Lägg till ett steg som kör `npm run build` efter testerna.
-2. Lägg till ett steg som kör `eslint .` för att linta koden.
-3. Se till att pipelinen misslyckas om linter hittar fel.
-4. Pusha ändringarna och kontrollera att alla steg körs.
+### 🔴 Svår – Lägg till fler steg och skapa ett "bygg-test-flöde"
+Mål: Se hur en pipeline kan bestå av flera steg som körs i ordning.
+
+1. I din `ci.yml`, lägg till ett steg som bygger projektet efter att testerna körts:
+    ```yaml
+    - run: npm run build
+    ```
+2. Lägg till ett steg för att kolla kodkvalitet med ESLint:
+    ```yaml
+    - run: npx eslint .
+    ```
+3. Om ESLint hittar fel, ska pipelinen misslyckas.
+4. Gör en medveten ESLint-varning (t.ex. lägg till en oanvänd variabel) och pusha — bekräfta att pipelinen blir **röd**.
+5. Rätta felet och pusha igen — kontrollera att pipelinen blir **grön**.
